@@ -2,7 +2,10 @@
     "name": "LittleBitGames.Ads",
     "rootNamespace": "",
     "references": [
-        "GUID:0db1d5a1e1470114c8d93e6af2b34e15"
+        "GUID:0db1d5a1e1470114c8d93e6af2b34e15",
+        "GUID:69246b39d9114134eb297d386a5dfe4e",
+        "GUID:b4f7b59e66f3b42cf95c5358d565c84f",
+        "GUID:a4cfc1a18fa3a469b96d885db522f42e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
