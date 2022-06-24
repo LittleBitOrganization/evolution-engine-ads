@@ -17,9 +17,10 @@
 
 ```json
 
-"com.google.external-dependency-manager" : "https://github.com/LittleBitOrganization/evolution-engine-google-version-handler.git",
+"com.littlebitgames.ads" : "git@github.com:LittleBitOrganization/evolution-engine-ads.git#2.0.0",
 "com.littlebitgames.environmentcore": "https://github.com/LittleBitOrganization/evolution-engine-environment-core-module.git#1.0.1",
-"com.littlebitgames.coremodule": "https://github.com/LittleBitOrganization/evolution-engine-core.git"
+"com.littlebitgames.coremodule": "https://github.com/LittleBitOrganization/evolution-engine-core.git",
+"com.google.external-dependency-manager" : "https://github.com/LittleBitOrganization/evolution-engine-google-version-handler.git"
 
 ```
 
