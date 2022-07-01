@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEngine;
 
-// [MenuItem()]
 namespace LittleBitGames.Ads.Configs
 {
     public class AdsConfig : ScriptableObject
@@ -10,9 +9,10 @@ namespace LittleBitGames.Ads.Configs
         public ExecutionMode Mode => mode;
 
         [SerializeField] private MaxSettings _maxSettings;
-    
+
         public MaxSettings MaxSettings => _maxSettings;
 
+#if UNITY_EDITOR
         [MenuItem("Tools/Configs/Create Ads Config")]
         public static void Create()
         {
@@ -21,5 +21,6 @@ namespace LittleBitGames.Ads.Configs
             AssetDatabase.CreateAsset(obj, "Assets/Resources/Configs/AdsConfig.asset");
             AssetDatabase.SaveAssets();
         }
+#endif
     }
 }
