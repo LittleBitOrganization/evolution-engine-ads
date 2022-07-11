@@ -25,7 +25,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             Key = key;
             Events = events;
 
-            _retryTimer = new(coroutineRunner, Load);
+            _retryTimer = new RetryTimer(coroutineRunner, Load);
 
             ObserveMaxSdkCallback();
         }
@@ -46,7 +46,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
         {
             UnitPlace = from;
 
-            _adShowInfoFactory = new(Key, from);
+            _adShowInfoFactory = new AdShowInfoFactory(Key, from);;
             _callback = callback;
 
             if (IsAdReady(Key)) ShowAd(Key);
