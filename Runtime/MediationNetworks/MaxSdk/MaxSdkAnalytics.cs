@@ -32,6 +32,8 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info) { OnAdRevenuePaid(s, info, AdType.Inter); };
             
             MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info) { OnAdRevenuePaid(s, info, AdType.Rewarded); };
+            
+            MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info) { OnAdRevenuePaid(s, info, AdType.Banner); };
         }
 
         private void OnAdRevenuePaid(string adUnitId, MaxSdkBase.AdInfo adInfo, AdType adType)
