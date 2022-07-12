@@ -11,11 +11,11 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
         private const string SdkSourceName = "applovin_max_sdk";
         private const string Currency = "USD";
 
-        private readonly List<IAdUnit> _adUnits;
+        private readonly IReadOnlyList<IAdUnit> _adUnits;
 
         public event Action<IDataEventAdImpression, AdType> OnAdRevenuePaidEvent;
 
-        public MaxSdkAnalytics(MaxSdkInitializer maxSdkInitializer, List<IAdUnit> adUnits)
+        public MaxSdkAnalytics(MaxSdkInitializer maxSdkInitializer, IReadOnlyList<IAdUnit> adUnits)
         {
             if (!adUnits.Validate()) ThrowException();
 
@@ -29,11 +29,20 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
 
         private void Subscribe()
         {
-            MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info) { OnAdRevenuePaid(s, info, AdType.Inter); };
-            
-            MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info) { OnAdRevenuePaid(s, info, AdType.Rewarded); };
-            
-            MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info) { OnAdRevenuePaid(s, info, AdType.Banner); };
+            MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info)
+            {
+                OnAdRevenuePaid(s, info, AdType.Inter);
+            };
+
+            MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info)
+            {
+                OnAdRevenuePaid(s, info, AdType.Rewarded);
+            };
+
+            MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info)
+            {
+                OnAdRevenuePaid(s, info, AdType.Banner);
+            };
         }
 
         private void OnAdRevenuePaid(string adUnitId, MaxSdkBase.AdInfo adInfo, AdType adType)
