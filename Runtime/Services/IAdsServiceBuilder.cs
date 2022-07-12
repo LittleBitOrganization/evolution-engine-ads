@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using LittleBitGames.Ads.AdUnits;
+using LittleBitGames.Ads.MediationNetworks;
 
 namespace LittleBitGames.Ads
 {
@@ -9,5 +10,7 @@ namespace LittleBitGames.Ads
         void BuildRewardedAdUnit();
         IAdsService GetResult();
         IReadOnlyList<IAdUnit> CreatedAdUnits { get; }
+        
+        IMediationNetworkInitializer Initializer { get; }
     }
 }

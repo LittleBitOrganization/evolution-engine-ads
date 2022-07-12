@@ -13,7 +13,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
 
         private readonly List<IAdUnit> _adUnits;
 
-        public event Action<IDataEventAdImpression> OnAdRevenuePaidEvent;
+        public event Action<IDataEventAdImpression, AdType> OnAdRevenuePaidEvent;
 
         public MaxSdkAnalytics(MaxSdkInitializer maxSdkInitializer, List<IAdUnit> adUnits)
         {
@@ -29,11 +29,12 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
 
         private void Subscribe()
         {
-            MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += OnAdRevenuePaid;
-            MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += OnAdRevenuePaid;
+            MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info) { OnAdRevenuePaid(s, info, AdType.Inter); };
+            
+            MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += delegate(string s, MaxSdkBase.AdInfo info) { OnAdRevenuePaid(s, info, AdType.Rewarded); };
         }
 
-        private void OnAdRevenuePaid(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        private void OnAdRevenuePaid(string adUnitId, MaxSdkBase.AdInfo adInfo, AdType adType)
         {
             var ad = _adUnits.FindByKey(adUnitId);
 
@@ -45,7 +46,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
                 Currency,
                 adInfo.Revenue);
 
-            OnAdRevenuePaidEvent?.Invoke(adImpressionEvent);
+            OnAdRevenuePaidEvent?.Invoke(adImpressionEvent, adType);
         }
     }
 }
