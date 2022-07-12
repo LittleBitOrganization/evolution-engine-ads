@@ -1,7 +1,4 @@
-namespace LittleBitGames.Ads.AdUnits
+public interface IAdUnitPlace
 {
-    public interface IAdUnitPlace
-    {
-        public string StringValue { get; }
-    }
+    public string StringValue { get; }
 }

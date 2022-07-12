@@ -1,4 +1,5 @@
 using System;
+using Events;
 using LittleBitGames.Ads.Configs;
 
 namespace LittleBitGames.Ads.MediationNetworks.MaxSdk

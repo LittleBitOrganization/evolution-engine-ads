@@ -8,7 +8,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
 {
     public class MaxSdkAnalytics : IMediationNetworkAnalytics
     {
-        private const string SdkSourceName = "AppLovinMax";
+        private const string SdkSourceName = "applovin_max_sdk";
         private const string Currency = "USD";
 
         private readonly List<IAdUnit> _adUnits;
@@ -41,7 +41,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             var ad = _adUnits.FindByKey(adUnitId);
 
             var adImpressionEvent = new DataEventAdImpression(
-                new SdkSource(SdkSourceName),
+                new SdkSource("SdkSourceName"),
                 adInfo.NetworkName,
                 adInfo.AdFormat,
                 ad.UnitPlace.StringValue,

@@ -1,11 +1,8 @@
 using System;
 
-namespace LittleBitGames.Ads.AdUnits
+public interface IAdUnitKey : IEquatable<IAdUnitKey>
 {
-    public interface IAdUnitKey : IEquatable<IAdUnitKey>
-    {
-        public string StringValue { get; }
+    public string StringValue { get; }
 
-        public bool Validate();
-    }
+    public bool Validate();
 }
