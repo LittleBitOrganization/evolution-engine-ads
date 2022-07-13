@@ -40,7 +40,11 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             Events.OnAdLoadFailed += OnAdLoadFailed;
             Events.OnAdHidden += OnAdHiddenEvent;
             Events.OnAdDisplayFailed += OnAdDisplayFailed;
+            Events.OnAdDisplayed += OnAdDisplayed;
         }
+
+        private void OnAdDisplayed(string arg1, MaxSdkBase.AdInfo arg2) => Finish(true);
+   
 
         public void Show(IAdUnitPlace from, Action<AdShowInfo> callback)
         {
@@ -52,7 +56,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             if (IsAdReady(Key)) ShowAd(Key);
         }
 
-        public void Load() => global::MaxSdk.LoadInterstitial(Key.StringValue);
+        public abstract void Load();
 
         private void Finish(bool success)
         {

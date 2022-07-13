@@ -13,5 +13,6 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
         protected override bool IsAdReady(IAdUnitKey key) => global::MaxSdk.IsRewardedAdReady(_key.StringValue);
 
         protected override void ShowAd(IAdUnitKey key) => global::MaxSdk.ShowRewardedAd(_key.StringValue);
+        public override void Load() => global::MaxSdk.LoadRewardedAd(_key.StringValue);
     }
 }
