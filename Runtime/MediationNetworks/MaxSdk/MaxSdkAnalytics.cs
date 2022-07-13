@@ -4,6 +4,7 @@ using LittleBitGames.Ads.AdUnits;
 using LittleBitGames.Ads.Collections.Extensions;
 using LittleBitGames.Environment.Ads;
 using LittleBitGames.Environment.Events;
+using UnityEngine.Scripting;
 
 namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
 {
@@ -16,6 +17,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
 
         public event Action<IDataEventAdImpression, AdType> OnAdRevenuePaidEvent;
 
+        [Preserve]
         public MaxSdkAnalytics(MaxSdkInitializer maxSdkInitializer, IReadOnlyList<IAdUnit> adUnits)
         {
             if (!adUnits.Validate()) ThrowException();
