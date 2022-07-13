@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Tracing;
 using LittleBit.Modules.CoreModule;
 using LittleBitGames.Ads.AdUnits;
 using LittleBitGames.Ads.Common;
@@ -31,7 +32,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
         }
 
         protected abstract bool IsAdReady(IAdUnitKey key);
-        
+
         protected abstract void ShowAd(IAdUnitKey key);
 
         private void ObserveMaxSdkCallback()
@@ -40,19 +41,21 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             Events.OnAdLoadFailed += OnAdLoadFailed;
             Events.OnAdHidden += OnAdHiddenEvent;
             Events.OnAdDisplayFailed += OnAdDisplayFailed;
+            Events.OnAdDisplayed += OnAdDisplayed;
         }
 
         public void Show(IAdUnitPlace from, Action<AdShowInfo> callback)
         {
             UnitPlace = from;
 
-            _adShowInfoFactory = new AdShowInfoFactory(Key, from);;
+            _adShowInfoFactory = new AdShowInfoFactory(Key, from);
+
             _callback = callback;
 
             if (IsAdReady(Key)) ShowAd(Key);
         }
 
-        public void Load() => global::MaxSdk.LoadInterstitial(Key.StringValue);
+        public abstract void Load();
 
         private void Finish(bool success)
         {
@@ -66,6 +69,9 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             var adShowInfo = _adShowInfoFactory.Create(success);
             _callback?.Invoke(adShowInfo);
         }
+
+        private void OnAdDisplayed(string arg1, MaxSdkBase.AdInfo arg2)
+            => Finish(true);
 
         private void OnAdLoaded(string adUnitId, MaxSdkBase.AdInfo adInfo) =>
             _retryTimer.Reset();
