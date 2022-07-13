@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Events;
 using LittleBitGames.Ads.AdUnits;
-using LittleBitGames.Environment.Ads;
 
 namespace LittleBitGames.Ads
 {
