@@ -4,7 +4,7 @@ namespace LittleBitGames.Ads.AdUnits
     {
         public string StringValue { get; }
 
-        public AdUnitPlace(string place)
+        public AdUnitPlace(string place = "MainView")
         {
             StringValue = place;
         }
