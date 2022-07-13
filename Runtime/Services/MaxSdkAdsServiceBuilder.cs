@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
-using Events;
 using LittleBit.Modules.CoreModule;
 using LittleBitGames.Ads.AdUnits;
 using LittleBitGames.Ads.Configs;
-using LittleBitGames.Ads.MediationNetworks;
 using LittleBitGames.Ads.MediationNetworks.MaxSdk;
+using LittleBitGames.Environment.Ads;
 
 namespace LittleBitGames.Ads
 {
