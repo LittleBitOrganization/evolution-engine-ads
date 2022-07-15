@@ -51,9 +51,9 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
         private void OnAdRevenuePaid(string adUnitId, MaxSdkBase.AdInfo adInfo, AdType adType)
         {
             var ad = _adUnits.FindByKey(adUnitId);
-
+            
             var adImpressionEvent = new DataEventAdImpression(
-                new SdkSource("SdkSourceName"),
+                new SdkSource(SdkSourceName),
                 adInfo.NetworkName,
                 adInfo.AdFormat,
                 ad.UnitPlace.StringValue,
