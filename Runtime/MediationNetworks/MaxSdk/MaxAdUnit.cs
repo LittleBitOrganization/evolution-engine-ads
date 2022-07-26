@@ -40,10 +40,10 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             Events.OnAdLoadFailed += OnAdLoadFailed;
             Events.OnAdHidden += OnAdHiddenEvent;
             Events.OnAdDisplayFailed += OnAdDisplayFailed;
-            Events.OnAdDisplayed += OnAdDisplayed;
+            Events.OnAdRevenuePaid += OnAdRevenuePaid;
         }
 
-        private void OnAdDisplayed(string arg1, MaxSdkBase.AdInfo arg2) => Finish(true);
+        private void OnAdRevenuePaid(string arg1, MaxSdkBase.AdInfo arg2) => Finish(true);
    
 
         public void Show(IAdUnitPlace from, Action<AdShowInfo> callback)
