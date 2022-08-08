@@ -11,6 +11,7 @@ namespace LittleBitGames.Ads
         private readonly MaxSdkAdsServiceBuilder _builder;
         private readonly AdsConfig _adsConfig;
         private readonly ICreator _creator;
+        private IAdsService _adsService;
 
         public MaxSdkAds(ICreator creator, ICoroutineRunner coroutineRunner)
         {
@@ -24,12 +25,13 @@ namespace LittleBitGames.Ads
         public IAdsService CreateAdsService()
         {
             var adsService = _builder.QuickBuild();
-            
-            adsService.Run();
 
-            return adsService;
+            _adsService = adsService;
+            _adsService.Run();
+
+            return _adsService;
         }
 
-        public IMediationNetworkAnalytics CreateAnalytics() => _creator.Instantiate<MaxSdkAnalytics>();
+        public IMediationNetworkAnalytics CreateAnalytics() => _creator.Instantiate<MaxSdkAnalytics>(_adsService);
     }
 }
