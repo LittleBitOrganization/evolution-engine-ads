@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using LittleBit.Modules.CoreModule;
 using LittleBitGames.Ads.AdUnits;
 using LittleBitGames.Ads.Configs;
@@ -13,42 +12,24 @@ namespace LittleBitGames.Ads
 
         private readonly AdsConfig _adsConfig;
 
-        public IReadOnlyList<IAdUnit> CreatedAdUnits => _adUnits.AsReadOnly();
-
-        private readonly List<IAdUnit> _adUnits;
-
         public MaxSdkAdUnitsFactory(ICoroutineRunner coroutineRunner, AdsConfig adsConfig)
         {
-            _adUnits = new List<IAdUnit>();
-
             _adsConfig = adsConfig;
-            
+
             _coroutineRunner = coroutineRunner;
         }
 
-        public IAdUnit CreateInterAdUnit()
-        {
-            var ad = new MaxSdkInterAd(GetKey(_adsConfig.MaxSettings.MaxInterAdUnitKey), _coroutineRunner);
-            
-            _adUnits.Add(ad);
-            
-            return ad;
-        }
+        public IAdUnit CreateInterAdUnit() =>
+            new MaxSdkInterAd(GetKey(_adsConfig.MaxSettings.PlatformSettings.MaxInterAdUnitKey), _coroutineRunner);
 
-        public IAdUnit CreateRewardedAdUnit()
-        {
-            var ad = new MaxSdkRewardedAd(GetKey(_adsConfig.MaxSettings.MaxRewardedAdUnitKey), _coroutineRunner);
-            
-            _adUnits.Add(ad);
-
-            return ad;
-        }
+        public IAdUnit CreateRewardedAdUnit() =>
+            new MaxSdkRewardedAd(GetKey(_adsConfig.MaxSettings.PlatformSettings.MaxRewardedAdUnitKey), _coroutineRunner);
 
         private IAdUnitKey GetKey(string s)
         {
             var key = new AdUnitKey(s);
 
-            if (!key.Validate()) throw new Exception("Max inter ad key is invalid!");
+            if (!key.Validate()) throw new Exception($"Max ad unit key is invalid! Key: {s}");
 
             return key;
         }

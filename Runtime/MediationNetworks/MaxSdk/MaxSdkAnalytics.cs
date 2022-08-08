@@ -18,17 +18,17 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
         public event Action<IDataEventAdImpression, AdType> OnAdRevenuePaidEvent;
 
         [Preserve]
-        public MaxSdkAnalytics(MaxSdkInitializer maxSdkInitializer, IReadOnlyList<IAdUnit> adUnits)
+        public MaxSdkAnalytics(IAdsService adsService)
         {
-            if (!adUnits.Validate()) ThrowException();
-
-            _adUnits = adUnits;
-
-            maxSdkInitializer.OnMediationInitialized += Subscribe;
+            _adUnits = adsService.AdUnits;
+            
+            if (!_adUnits.Validate()) ThrowException();
+            
+            adsService.Initializer.OnMediationInitialized += Subscribe;
         }
 
         private static void ThrowException() =>
-            throw new Exception("Invalid list of ad units provided to MaxSdkAnalytics");
+            throw new Exception("Invalid list of ad units was provided to MaxSdkAnalytics");
 
         private void Subscribe()
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using LittleBitGames.Ads.AdUnits;
 using LittleBitGames.Environment.Ads;
 
@@ -11,11 +12,16 @@ namespace LittleBitGames.Ads
 
         private readonly IMediationNetworkInitializer _initializer;
 
+        public IMediationNetworkInitializer Initializer => _initializer;
+        public IReadOnlyList<IAdUnit> AdUnits { get; }
+
         public AdsService(IMediationNetworkInitializer initializer, IAdUnit interAd, IAdUnit rewardedAd)
         {
             _initializer = initializer;
             _rewardedAd = rewardedAd;
             _interAd = interAd;
+            
+            AdUnits = new[] {interAd, rewardedAd};
         }
 
         public void Run()
@@ -36,7 +42,7 @@ namespace LittleBitGames.Ads
                     break;
             }
         }
-
+        
         private void LoadAds()
         {
             _interAd?.Load();

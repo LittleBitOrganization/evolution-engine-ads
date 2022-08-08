@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using LittleBit.Modules.CoreModule;
 using LittleBitGames.Ads.AdUnits;
 using LittleBitGames.Ads.Configs;
@@ -9,35 +9,40 @@ namespace LittleBitGames.Ads
 {
     public class MaxSdkAdsServiceBuilder : IAdsServiceBuilder
     {
-        private readonly AdsConfig _adsConfig;
         private readonly MaxSdkAdUnitsFactory _adUnitsFactory;
         private readonly MaxSdkInitializer _initializer;
 
         private IAdUnit _inter, _rewarded;
-        private AdsService _adsService;
-        
-        public IReadOnlyList<IAdUnit> CreatedAdUnits => _adUnitsFactory.CreatedAdUnits;
+        private AdsConfig _adsConfig;
 
         public IMediationNetworkInitializer Initializer => _initializer;
 
         public MaxSdkAdsServiceBuilder(AdsConfig adsConfig, ICoroutineRunner coroutineRunner)
         {
-            _adUnitsFactory = new MaxSdkAdUnitsFactory(coroutineRunner, adsConfig);
             _adsConfig = adsConfig;
-            _initializer = new MaxSdkInitializer(_adsConfig);
+            _adUnitsFactory = new MaxSdkAdUnitsFactory(coroutineRunner, adsConfig);
+            _initializer = new MaxSdkInitializer(adsConfig);
+
+            if (!ValidateMaxSdkKey())
+                throw new Exception($"Max sdk key is invalid! Key: {_adsConfig.MaxSettings.MaxSdkKey}");
+        }
+
+        private bool ValidateMaxSdkKey() => !string.IsNullOrEmpty(_adsConfig.MaxSettings.MaxSdkKey);
+
+        public IAdsService QuickBuild()
+        {
+            if (!string.IsNullOrEmpty(_adsConfig.MaxSettings.PlatformSettings.MaxInterAdUnitKey)) BuildInterAdUnit();
+            if (!string.IsNullOrEmpty(_adsConfig.MaxSettings.PlatformSettings.MaxRewardedAdUnitKey)) BuildRewardedAdUnit();
+
+            return GetResult();
         }
 
         public void BuildInterAdUnit() =>
             _inter = _adUnitsFactory.CreateInterAdUnit();
-        
+
         public void BuildRewardedAdUnit() =>
             _rewarded = _adUnitsFactory.CreateRewardedAdUnit();
 
-        public IAdsService GetResult()
-        {
-            _adsService = new AdsService(_initializer, _inter, _rewarded);
-
-            return _adsService;
-        }
+        public IAdsService GetResult() => new AdsService(_initializer, _inter, _rewarded);
     }
 }
