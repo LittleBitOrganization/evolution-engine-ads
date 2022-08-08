@@ -30,6 +30,6 @@ namespace LittleBitGames.Ads
             return adsService;
         }
 
-        public void CreateAnalytics() => _creator.Instantiate<MaxSdkAnalytics>();
+        public IMediationNetworkAnalytics CreateAnalytics() => _creator.Instantiate<MaxSdkAnalytics>();
     }
 }
