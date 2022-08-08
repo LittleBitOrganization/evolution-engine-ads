@@ -5,7 +5,7 @@ namespace LittleBitGames.Ads.Configs
 {
     public class AdsConfig : ScriptableObject
     {
-        public const string PathInResources = "Configs";
+        public const string PathInResources = "Configs/AdsConfig";
         
         [SerializeField] private ExecutionMode mode;
         public ExecutionMode Mode => mode;

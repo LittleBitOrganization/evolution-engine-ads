@@ -1,6 +1,7 @@
 using LittleBit.Modules.CoreModule;
 using LittleBitGames.Ads.Configs;
 using LittleBitGames.Ads.MediationNetworks.MaxSdk;
+using LittleBitGames.Environment.Ads;
 using UnityEngine;
 
 namespace LittleBitGames.Ads
@@ -20,15 +21,15 @@ namespace LittleBitGames.Ads
             _builder = creator.Instantiate<MaxSdkAdsServiceBuilder>(_adsConfig);
         }
 
-        public IAdsService CreateAdsService(bool useAnalytics)
+        public IAdsService CreateAdsService()
         {
             var adsService = _builder.QuickBuild();
-
-            if (useAnalytics) _creator.Instantiate<MaxSdkAnalytics>(adsService);
-
+            
             adsService.Run();
 
             return adsService;
         }
+
+        public void CreateAnalytics() => _creator.Instantiate<MaxSdkAnalytics>();
     }
 }
