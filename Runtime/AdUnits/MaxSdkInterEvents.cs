@@ -14,13 +14,27 @@ namespace LittleBitGames.Ads.AdUnits
 
         public MaxSdkInterEvents()
         {
-            MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += (s, info) => OnAdRevenuePaid?.Invoke(s, info);
+
             MaxSdkCallbacks.Interstitial.OnAdLoadedEvent += (s, info) => OnAdLoaded?.Invoke(s, info);
             MaxSdkCallbacks.Interstitial.OnAdLoadFailedEvent += (s, info) => OnAdLoadFailed?.Invoke(s, info);
-            MaxSdkCallbacks.Interstitial.OnAdDisplayedEvent += (s, info) => OnAdFinished?.Invoke(s, info);
             MaxSdkCallbacks.Interstitial.OnAdClickedEvent += (s, info) => OnAdClicked?.Invoke(s, info);
             MaxSdkCallbacks.Interstitial.OnAdHiddenEvent += (s, info) => OnAdHidden?.Invoke(s, info);
-            MaxSdkCallbacks.Interstitial.OnAdDisplayFailedEvent += (s, error, info) => OnAdDisplayFailed?.Invoke(s, error, info);
+            MaxSdkCallbacks.Interstitial.OnAdDisplayFailedEvent +=
+                (s, error, info) => OnAdDisplayFailed?.Invoke(s, error, info);
+            
+            MaxSdkCallbacks.Interstitial.OnAdHiddenEvent += (s, info) =>
+            {
+                #if UNITY_EDITOR
+                OnAdFinished?.Invoke(s, info);
+                #endif
+            };
+            
+            MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += (s, info) =>
+            {
+                OnAdRevenuePaid?.Invoke(s, info);
+                OnAdFinished?.Invoke(s, info);
+            };
         }
+        
     }
 }
