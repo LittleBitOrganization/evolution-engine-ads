@@ -93,7 +93,7 @@ public override void InstallBindings()
 
 ```
 
-5. Покажите рекламу, используя метод <b> ShowAd() </b>
+4. Покажите рекламу, используя метод <b> ShowAd() </b>
 
 ```c#
 
