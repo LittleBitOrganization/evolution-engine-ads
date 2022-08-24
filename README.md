@@ -36,7 +36,7 @@
 
 ![Alt text](https://github.com/LittleBitOrganization/documentation-resources/blob/master/evolution-engine-ads/documentation-images/ads-config.png)
 
-3. Для подключения рекламы AppLovin Max используйте следующий инсталлер:
+3. Для подключения рекламы AppLovin Max через Zenject используйте следующий инсталлер:
 
 ```c#
 public override void InstallBindings()
@@ -92,6 +92,8 @@ public override void InstallBindings()
         }
 
 ```
+
+Также, если вы используеете Zenject вам необходимо создать класс [CreatorInDiContainer](https://github.com/LittleBitOrganization/documentation-resources/blob/master/evolution-engine/CreatorInDiContainer.md), если его нет в проекте.
 
 4. Покажите рекламу, используя метод <b> ShowAd() </b>
 
