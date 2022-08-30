@@ -7,9 +7,10 @@ namespace LittleBitGames.Ads
         private readonly IAdsService _adsService;
         private SkipAdsCondition _skipAdsCondition;
 
-        public CommandAdsFactory(IAdsService adsService)
+        public CommandAdsFactory(IAdsService adsService, SkipAdsCondition skipAdsCondition)
         {
             _adsService = adsService;
+            _skipAdsCondition = skipAdsCondition;
         }
 
         public CommandAds ShowReward(IAdUnitPlace place)
