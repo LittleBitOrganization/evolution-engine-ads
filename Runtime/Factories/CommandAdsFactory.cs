@@ -17,12 +17,12 @@ namespace LittleBitGames.Ads
 
         public CommandAds ShowReward(IAdUnitPlace place)
         {
-            return new CommandAds(_adsService, AdType.Rewarded, place, _skipAdsCondition, OnAdShow());
+            return new CommandAds(_adsService, AdType.Rewarded, place, _skipAdsCondition, OnAdShow);
         }
 
         public CommandAds ShowInter(IAdUnitPlace place)
         {
-            return new CommandAds(_adsService, AdType.Inter, place, _skipAdsCondition, OnAdShow());
+            return new CommandAds(_adsService, AdType.Inter, place, _skipAdsCondition, OnAdShow);
         }
 
         private void OnAdShow(bool success)
