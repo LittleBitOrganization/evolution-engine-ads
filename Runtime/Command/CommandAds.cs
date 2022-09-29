@@ -9,9 +9,11 @@ namespace LittleBitGames.Ads
         private readonly AdType _type;
         private readonly IAdUnitPlace _place;
         private readonly SkipAdsCondition _skipAdsCondition;
+        private readonly Action<bool> _callback;
 
-        public CommandAds(IAdsService adsService, AdType type, IAdUnitPlace place, SkipAdsCondition skipAdsCondition)
+        public CommandAds(IAdsService adsService, AdType type, IAdUnitPlace place, SkipAdsCondition skipAdsCondition, Action<bool> callback)
         {
+            _callback = callback;
             _adsService = adsService;
             _type = type;
             _place = place;
@@ -20,6 +22,8 @@ namespace LittleBitGames.Ads
 
         public void Execute(Action<bool> onShowed)
         {
+            onShowed += _callback;
+            
             if (_skipAdsCondition.Invoke())
             {
                 onShowed?.Invoke(true);
