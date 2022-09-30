@@ -8,9 +8,13 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
 {
     public abstract class MaxAdUnit : IAdUnit
     {
+        public event Action Loaded;
+        
         public IAdUnitPlace UnitPlace { get; set; }
 
         public IAdUnitEvents Events { get; }
+
+        public bool IsReady() => IsAdReady();
 
         public IAdUnitKey Key { get; }
 
@@ -30,9 +34,9 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             ObserveMaxSdkCallback();
         }
 
-        protected abstract bool IsAdReady(IAdUnitKey key);
+        protected abstract bool IsAdReady();
 
-        protected abstract void ShowAd(IAdUnitKey key);
+        protected abstract void ShowAd();
 
         private void ObserveMaxSdkCallback()
         {
@@ -53,7 +57,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             
             _callback = callback;
 
-            if (IsAdReady(Key)) ShowAd(Key);
+            if (IsAdReady()) ShowAd();
         }
 
         public abstract void Load();
@@ -71,8 +75,12 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             _callback?.Invoke(adShowInfo);
         }
 
-        private void OnAdLoaded(string adUnitId, MaxSdkBase.AdInfo adInfo) =>
+        private void OnAdLoaded(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
             _retryTimer.Reset();
+            
+            Loaded?.Invoke();
+        }
 
         private void OnAdLoadFailed(string adUnitId, MaxSdkBase.ErrorInfo errorInfo) =>
             _retryTimer.NextAttempt();

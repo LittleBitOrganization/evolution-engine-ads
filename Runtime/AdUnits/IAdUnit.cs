@@ -8,11 +8,14 @@ namespace LittleBitGames.Ads.AdUnits
 
         void Load();
 
+        bool IsReady();
+        
         IAdUnitKey Key { get; }
 
         IAdUnitPlace UnitPlace { get; set; }
         
         IAdUnitEvents Events { get; }
+        event Action Loaded;
     }
     
 }

@@ -20,7 +20,7 @@ namespace LittleBitGames.Ads
             _initializer = initializer;
             _rewardedAd = rewardedAd;
             _interAd = interAd;
-            
+
             AdUnits = new[] {interAd, rewardedAd};
         }
 
@@ -42,7 +42,14 @@ namespace LittleBitGames.Ads
                     break;
             }
         }
-        
+
+        public bool IsAdReady(AdType type) => type switch
+        {
+            AdType.Inter => _interAd.IsReady(),
+            AdType.Rewarded => _rewardedAd.IsReady(),
+            _ => false
+        };
+
         private void LoadAds()
         {
             _interAd?.Load();

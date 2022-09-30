@@ -13,5 +13,6 @@ namespace LittleBitGames.Ads
         IMediationNetworkInitializer Initializer { get; }
         
         IReadOnlyList<IAdUnit> AdUnits { get; }
+        bool IsAdReady(AdType type);
     }
 }
