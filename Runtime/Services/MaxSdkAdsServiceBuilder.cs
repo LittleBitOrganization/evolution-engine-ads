@@ -31,8 +31,10 @@ namespace LittleBitGames.Ads
 
         public IAdsService QuickBuild()
         {
-            if (!string.IsNullOrEmpty(_adsConfig.MaxSettings.PlatformSettings.MaxInterAdUnitKey)) BuildInterAdUnit();
-            if (!string.IsNullOrEmpty(_adsConfig.MaxSettings.PlatformSettings.MaxRewardedAdUnitKey)) BuildRewardedAdUnit();
+            if (!string.IsNullOrEmpty(_adsConfig.MaxSettings.PlatformSettings.MaxInterAdUnitKey) && _adsConfig.IsInter) 
+                BuildInterAdUnit();
+            if (!string.IsNullOrEmpty(_adsConfig.MaxSettings.PlatformSettings.MaxRewardedAdUnitKey) && _adsConfig.IsRewarded) 
+                BuildRewardedAdUnit();
 
             return GetResult();
         }

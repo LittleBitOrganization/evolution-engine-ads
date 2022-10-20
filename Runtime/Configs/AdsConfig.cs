@@ -9,6 +9,10 @@ namespace LittleBitGames.Ads.Configs
         
         [SerializeField] private ExecutionMode mode;
         public ExecutionMode Mode => mode;
+        
+        public bool IsInter => MaxSettings.IsInter;
+        
+        public bool IsRewarded => MaxSettings.IsRewarded;
 
         [field: SerializeField]
         public MaxSettings MaxSettings { get; private set; }
@@ -18,8 +22,20 @@ namespace LittleBitGames.Ads.Configs
         public static void Create()
         {
             var obj = CreateInstance<AdsConfig>();
+            
+            var fullPath = $"Assets/Resources/{PathInResources}";
+            string[] fullPathInParts = fullPath.Split("/");
+            string fillablePath = "Assets";
+            
+            for (int i = 1; i < fullPathInParts.Length - 1; i++)
+            {
+                if (!AssetDatabase.IsValidFolder($"{fillablePath}/{fullPathInParts[i]}"))
+                    AssetDatabase.CreateFolder($"{fillablePath}", $"{fullPathInParts[i]}");
+                
+                fillablePath += "/" + fullPathInParts[i];
+            }
 
-            AssetDatabase.CreateAsset(obj, $"Assets/Resources/{PathInResources}/AdsConfig.asset");
+            AssetDatabase.CreateAsset(obj, $"{fullPath}.asset");
             AssetDatabase.SaveAssets();
         }
 #endif
