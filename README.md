@@ -32,7 +32,7 @@
 ![Alt text](https://github.com/LittleBitOrganization/documentation-resources/blob/master/evolution-engine-ads/documentation-images/toolbar-menu.png)
 
 Конфиг будет создан по следующему пути - <b> Assets/Resources/Configs </b>
-Установите значения для необходимых ключей:
+Установите значения для необходимых ключей.
 
 ![Alt text](https://github.com/LittleBitOrganization/documentation-resources/blob/master/evolution-engine-ads/documentation-images/ads-config.png)
 
@@ -40,69 +40,170 @@
 
 ```c#
 public override void InstallBindings()
-        {
-            Container
-                .Bind<ICreator>()
-                .To<CreatorInDiContainer>()
-                .AsSingle()
-                .NonLazy();
+{
+    Container
+        .Bind<ICreator>()
+        .To<CreatorInDiContainer>()
+        .AsSingle()
+        .NonLazy();
 
-            Container
-                .Bind<ICoroutineRunner>()
-                .FromInstance(this)
-                .AsSingle()
-                .NonLazy();
-           
+    Container
+        .Bind<ICoroutineRunner>()
+        .FromInstance(this)
+        .AsSingle()
+        .NonLazy();
+   
 
-            var maxSdkAds = Container.Instantiate<MaxSdkAds>();
-            var adsService = maxSdkAds.CreateAdsService();
-            var analytics = maxSdkAds.CreateAnalytics();
+    var maxSdkAds = Container.Instantiate<MaxSdkAds>();
+    var adsService = maxSdkAds.CreateAdsService();
+    var analytics = maxSdkAds.CreateAnalytics();
 
-            Container
-                .Bind<IAdsService>()
-                .FromInstance(adsService)
-                .AsSingle()
-                .NonLazy();
-            
-            /* раскомментируйте, чтобы подключить аналитику
-            
-            Container
-                .BindInterfacesAndSelfTo<EventsService>()
-                .AsSingle()
-                .NonLazy();
+    Container
+        .Bind<IAdsService>()
+        .FromInstance(adsService)
+        .AsSingle()
+        .NonLazy();
+    Container
+        .Bind<SkipAdsCondition>()
+        .FromInstance(IsSkipAds)
+        .AsSingle()
+        .NonLazy();
+    Container
+        .Bind<CommandAdsFactory>()
+        .AsSingle()
+        .NonLazy();
+    
+    /* раскомментируйте, чтобы подключить аналитику
+    
+    Container
+        .BindInterfacesAndSelfTo<EventsService>()
+        .AsSingle()
+        .NonLazy();
 
-            Container
-                .Bind<AnalyticsInitializer>()
-                .FromNewComponentOnNewGameObject()
-                .AsSingle()
-                .NonLazy();
-            
-            Container
-                .Bind<IMediationNetworkAnalytics>()
-                .FromInstance(analytics)
-                .AsSingle()
-                .NonLazy();
-                
-            Container
-                .Bind<AdRevenueAnalytics>()
-                .AsSingle()
-                .NonLazy();
-                
-           */
-        }
+    Container
+        .Bind<AnalyticsInitializer>()
+        .FromNewComponentOnNewGameObject()
+        .AsSingle()
+        .NonLazy();
+    
+    Container
+        .Bind<IMediationNetworkAnalytics>()
+        .FromInstance(analytics)
+        .AsSingle()
+        .NonLazy();
+        
+    Container
+        .Bind<AdRevenueAnalytics>()
+        .AsSingle()
+        .NonLazy();
+        
+   */
+}
 
 ```
 
 Также, если вы используеете Zenject вам необходимо создать класс [CreatorInDiContainer](https://github.com/LittleBitOrganization/documentation-resources/blob/master/evolution-engine/CreatorInDiContainer.md), если его нет в проекте.
 
-4. Покажите рекламу, используя метод <b> ShowAd() </b>
+4. Покажите рекламу, используя метод <b> ShowReward() </b> или <b> ShowInter() </b>. предварительно получив ссылку на <b> CommandAdsFactory </b>:
 
 ```c#
 
-adsService.ShowAd(AdType.Inter, new AdUnitPlace("shop"), _ => Debug.Log("Gotcha!"));
-adsService.ShowAd(AdType.Rewarded, new AdUnitPlace("booster"), _ => Debug.Log("Meow!"));
+    private CommandAdsFactory _commandAdsFactory;
+
+    [Inject]
+    public void Constructor(CommandAdsFactory commandAdsFactory)
+    {
+        _commandAdsFactory = commandAdsFactory;
+    }
+
+    public void OnShowInter()
+    {
+        _commandAdsFactory
+            .ShowInter(new AdUnitPlace("shop"))
+            .Execute((isSuc) =>
+            {
+                if (isSuc)
+                    Debug.LogError("Show Inter Ads - " + isSuc);
+            });
+    }
+    
+    public void OnShowRewarded()
+    {
+        _commandAdsFactory
+            .ShowReward(new AdUnitPlace("booster"))
+            .Execute((isSuc) =>
+            {
+                if (isSuc)
+                    Debug.LogError("Show Reward Ads - " + isSuc);
+            });
+    }
 
 ```
+
+# Additionally
+
+## CompositeSkipAdCommand
+
+Данная стратегия может помочь реализовать скип рекламы, например, за какие-нибудь игровые ресурсы. Необходимо самостоятельно добавить интерфейс <b> ISkipCommand </b> и класс <b> CompositeSkipAdCommand </b> в свой проект.
+
+1. <b> ISkipCommand </b>:
+```c#
+public interface ISkipAdCommand
+{
+    public bool CanExecute { get; }
+
+    public void Execute();
+}
+```
+2. <b> CompositeSkipAdCommand </b>:
+```c#
+public class CompositeSkipAdCommand : ISkipAdCommand
+{
+    private readonly List<ISkipAdCommand> _commands;
+    
+    public CompositeSkipAdCommand() =>
+        _commands = new();
+
+    public bool CanExecute => _commands.Any(c => c.CanExecute);
+    
+    public void Execute()
+    {
+        var command = _commands.First(c => c.CanExecute);
+        
+        command.Execute();
+    }
+
+    public void Add(ISkipAdCommand command)
+        => _commands.Add(command);
+}
+```
+3. Пример использования в инсталлере:
+```c#
+    Container
+        .Bind<SkipAdsCondition>()
+        .FromInstance(() => compositeSkipCommand.CanExecute)
+        .AsSingle()
+        .NonLazy();
+    
+    var compositeSkipCommand = Container
+        .Instantiate<CompositeSkipAdCommand>();
+
+    var skipForExample1 = Container
+        .Instantiate<SkipForExample1>();
+
+    var skipForExample2 = Container
+        .Instantiate<SkipForExample2>();
+
+    compositeSkipCommand.Add(skipForExample1);
+    compositeSkipCommand.Add(skipForExample2);
+    
+    commandAdsFactory
+        .AdShowed += () =>
+    {
+        if(compositeSkipCommand.CanExecute) compositeSkipCommand.Execute();
+    };
+```
+
 # Advanced
 
 ## Добавление новой рекламной сети
