@@ -9,7 +9,8 @@
 - [Ads Module](#ads-module)
 - [Dependencies](#dependencies)
 - [Quick Start](#quick-start)
-
+- [Additionally](#additionally)
+- [Advanced](#advanced)
 # Dependencies
 
 Добавьте следующие зависимости в <b> manifest.json </b>:
@@ -107,7 +108,6 @@ public override void InstallBindings()
 4. Покажите рекламу, используя метод <b> ShowReward() </b> или <b> ShowInter() </b>. предварительно получив ссылку на <b> CommandAdsFactory </b>:
 
 ```c#
-
     private CommandAdsFactory _commandAdsFactory;
 
     [Inject]
@@ -142,11 +142,24 @@ public override void InstallBindings()
 
 # Additionally
 
+## SkipAdsCondition
+
+Делегат для пропуска рекламы по какому либо условию. Данный делегат передаётся в конструктор CommandAdsFactory, и предоставляет возможность сэмулировать просмотр рекламы, без просмотра рекламы, если SkipAdsCondition будет возвращать true.
+Это позволяет реализовать механики NoAds или скипа за рекламные купоны.
+
+```c#
+Container
+    .Bind<SkipAdsCondition>()
+    .FromInstance(() => true)
+    .AsSingle()
+    .NonLazy();
+```
+
+
+
 ## CompositeSkipAdCommand
+Для реализации NoAds или пропуска рекламы например, за какие-нибудь игровые ресурсы вы можете создать ISkipCommand и его реализацию
 
-Данная стратегия может помочь реализовать скип рекламы, например, за какие-нибудь игровые ресурсы. Необходимо самостоятельно добавить интерфейс <b> ISkipCommand </b> и класс <b> CompositeSkipAdCommand </b> в свой проект.
-
-1. <b> ISkipCommand </b>:
 ```c#
 public interface ISkipAdCommand
 {
@@ -154,8 +167,23 @@ public interface ISkipAdCommand
 
     public void Execute();
 }
+
+//Пример пропуска за рекламные купоны
+public class SkipForTickets : ISkipAdCommand
+{
+    private readonly PlayerResourcesModel _playerResourcesModel;
+
+    public SkipForTickets(PlayerResourcesModel playerResourcesModel) =>
+        _playerResourcesModel = playerResourcesModel;
+
+    public bool CanExecute => _playerResourcesModel.GetSlotData(ResourceIDs.Tickets).Value > 0;
+        
+    public void Execute() => _playerResourcesModel.Substract(ResourceIDs.Tickets, 1, "ads-service", "tickets-skip");
+}
 ```
-2. <b> CompositeSkipAdCommand </b>:
+
+<b> Вы можете составить композицию скипов рекламы </b>
+
 ```c#
 public class CompositeSkipAdCommand : ISkipAdCommand
 {
@@ -177,7 +205,7 @@ public class CompositeSkipAdCommand : ISkipAdCommand
         => _commands.Add(command);
 }
 ```
-3. Пример использования в инсталлере:
+
 ```c#
     Container
         .Bind<SkipAdsCondition>()
@@ -185,20 +213,16 @@ public class CompositeSkipAdCommand : ISkipAdCommand
         .AsSingle()
         .NonLazy();
     
-    var compositeSkipCommand = Container
-        .Instantiate<CompositeSkipAdCommand>();
+    var compositeSkipCommand = Container.Instantiate<CompositeSkipAdCommand>();
 
-    var skipForExample1 = Container
-        .Instantiate<SkipForExample1>();
+    var skipForTickers = Container.Instantiate<SkipForTickets>();
+    var noAdsSkipCommand = Container.Instantiate<SkipForNoAds>();
 
-    var skipForExample2 = Container
-        .Instantiate<SkipForExample2>();
+    compositeSkipCommand.Add(skipForTickers);
+    compositeSkipCommand.Add(noAdsSkipCommand);
 
-    compositeSkipCommand.Add(skipForExample1);
-    compositeSkipCommand.Add(skipForExample2);
-    
-    commandAdsFactory
-        .AdShowed += () =>
+   
+    commandAdsFactory.AdShowed += () =>
     {
         if(compositeSkipCommand.CanExecute) compositeSkipCommand.Execute();
     };
