@@ -9,9 +9,7 @@ namespace LittleBitGames.Ads
     {
         void Run();
         void ShowAd(AdType adType, IAdUnitPlace from, Action<AdShowInfo> callback);
-        
         IMediationNetworkInitializer Initializer { get; }
-        
         IReadOnlyList<IAdUnit> AdUnits { get; }
         bool IsAdReady(AdType type);
     }
