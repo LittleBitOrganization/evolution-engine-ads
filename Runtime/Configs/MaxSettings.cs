@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LittleBitGames.Ads.Configs
 {
     [Serializable]
-    public class MaxSettings
+    public class MaxSettings : IMediationSettings
     {
         [field: SerializeField] public string MaxSdkKey { get; private set; }
         [field: SerializeField] public bool IsInter { get; private set; } = true;
@@ -19,5 +19,11 @@ namespace LittleBitGames.Ads.Configs
             RuntimePlatform.IPhonePlayer => settingsIOS,
             _ => settingsAndroid
         };
+    }
+
+    public interface IMediationSettings
+    {
+        public bool IsInter { get; }
+        public bool IsRewarded { get; }
     }
 }

@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,13 +11,28 @@ namespace LittleBitGames.Ads.Configs
         [SerializeField] private ExecutionMode mode;
         public ExecutionMode Mode => mode;
         
-        public bool IsInter => MaxSettings.IsInter;
+        public bool IsInter => GetMediationSettings.IsInter;
         
-        public bool IsRewarded => MaxSettings.IsRewarded;
+        public bool IsRewarded => GetMediationSettings.IsRewarded;
 
+        [Dropdown("_getMediationSettings")] public IMediationSettings GetMediationSettings;
+        
+        private DropdownList<IMediationSettings> _getMediationSettings()
+        {
+            return new DropdownList<IMediationSettings>()
+            {
+                { "Appodeal",   MaxSettings },
+                { "MaxSDK",    AppodealSettings }
+            };
+        }
+        
         [field: SerializeField]
         public MaxSettings MaxSettings { get; private set; }
         
+        [field: SerializeField]
+        public AppodealSettings AppodealSettings { get; private set; }
+
+
 #if UNITY_EDITOR
         [MenuItem("Tools/Configs/Create Ads Config")]
         public static void Create()
