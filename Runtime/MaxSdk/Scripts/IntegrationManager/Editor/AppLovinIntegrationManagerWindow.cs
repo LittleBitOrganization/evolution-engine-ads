@@ -617,6 +617,8 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             using (new EditorGUILayout.VerticalScope("box"))
             {
                 GUILayout.Space(4);
+                EditorGUILayout.HelpBox("Consent Flow has been deprecated and will be removed in a future release.", MessageType.Warning);
+                GUILayout.Space(4);
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(4);
                 AppLovinSettings.Instance.ConsentFlowEnabled = GUILayout.Toggle(AppLovinSettings.Instance.ConsentFlowEnabled, "  Enable Consent Flow (iOS Only)");
@@ -862,6 +864,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         private IEnumerator UpgradeAllNetworks()
         {
             networkButtonsEnabled = false;
+            EditorApplication.LockReloadAssemblies();
             var networks = pluginData.MediatedNetworks;
             foreach (var network in networks)
             {
@@ -872,8 +875,12 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                     yield return AppLovinIntegrationManager.Instance.DownloadPlugin(network, false);
                 }
             }
-
+            
+            EditorApplication.UnlockReloadAssemblies();
             networkButtonsEnabled = true;
+
+            // The pluginData becomes stale after the networks have been updated, and we should re-load it.
+            Load();
         }
 
         /// <summary>

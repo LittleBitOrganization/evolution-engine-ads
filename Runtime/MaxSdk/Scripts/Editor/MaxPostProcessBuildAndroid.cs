@@ -98,8 +98,6 @@ namespace AppLovinMax.Scripts.Editor
 
         private static void ProcessAndroidManifest(string path)
         {
-            if (!EditorPrefs.HasKey(MaxSdkLogger.KeyVerboseLoggingEnabled)) return;
-
             var manifestPath = Path.Combine(path, "src/main/AndroidManifest.xml");
             XDocument manifest;
             try
@@ -141,7 +139,7 @@ namespace AppLovinMax.Scripts.Editor
 
         private static void EnableVerboseLoggingIfNeeded(XElement elementApplication)
         {
-            var enabled = EditorPrefs.GetBool(MaxSdkLogger.KeyVerboseLoggingEnabled);
+            var enabled = EditorPrefs.GetBool(MaxSdkLogger.KeyVerboseLoggingEnabled, false);
 
             var descendants = elementApplication.Descendants();
             var verboseLoggingMetaData = descendants.FirstOrDefault(descendant => descendant.FirstAttribute != null &&

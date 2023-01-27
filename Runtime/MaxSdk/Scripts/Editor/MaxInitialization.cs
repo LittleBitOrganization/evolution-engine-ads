@@ -26,6 +26,10 @@ namespace AppLovinMax.Scripts.Editor
 #if UNITY_2018_2_OR_NEWER
         private static readonly List<string> ObsoleteFileExportPathsToDelete = new List<string>
         {
+            // The `EventSystemChecker` has been renamed to `MaxEventSystemChecker`.
+            "MaxSdk/Scripts/EventSystemChecker.cs",
+            "MaxSdk/Scripts/EventSystemChecker.cs.meta",
+
             // Google AdMob adapter pre/post process scripts. The logic has been migrated to the main plugin.
             "MaxSdk/Mediation/Google/Editor/MaxGoogleInitialize.cs",
             "MaxSdk/Mediation/Google/Editor/MaxGoogleInitialize.cs.meta",
@@ -35,6 +39,8 @@ namespace AppLovinMax.Scripts.Editor
             "MaxSdk/Mediation/Google/Editor/PostProcessor.cs.meta",
             "MaxSdk/Mediation/Google/Editor/PreProcessor.cs",
             "MaxSdk/Mediation/Google/Editor/PreProcessor.cs.meta",
+            "MaxSdk/Mediation/Google/Editor/MaxSdk.Mediation.Google.Editor.asmdef",
+            "MaxSdk/Mediation/Google/MaxSdk.Mediation.Google.Editor.asmdef.meta",
             "Plugins/Android/MaxMediationGoogle.androidlib",
             "Plugins/Android/MaxMediationGoogle.androidlib.meta",
 
@@ -43,6 +49,8 @@ namespace AppLovinMax.Scripts.Editor
             "MaxSdk/Mediation/GoogleAdManager/Editor/MaxGoogleAdManagerInitialize.cs.meta",
             "MaxSdk/Mediation/GoogleAdManager/Editor/PostProcessor.cs",
             "MaxSdk/Mediation/GoogleAdManager/Editor/PostProcessor.cs.meta",
+            "MaxSdk/Mediation/GoogleAdManager/Editor/MaxSdk.Mediation.GoogleAdManager.Editor.asmdef",
+            "MaxSdk/Mediation/GoogleAdManager/Editor/MaxSdk.Mediation.GoogleAdManager.Editor.asmdef.meta",
             "Plugins/Android/MaxMediationGoogleAdManager.androidlib",
             "Plugins/Android/MaxMediationGoogleAdManager.androidlib.meta"
         };

@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 6911eea65b30f4115900f4448933635b
+guid: e0acf281ba86b4929a6942ecd998395b
 labels:
 - al_max
-- al_max_export_path-MaxSdk/Scripts/EventSystemChecker.cs
+- al_max_export_path-MaxSdk/Scripts/MaxEventSystemChecker.cs
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

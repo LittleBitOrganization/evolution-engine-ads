@@ -10,13 +10,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace AppLovinMax.Scripts.EventSystems
+namespace AppLovinMax.Scripts
 {
     /// <summary>
     /// A script to check and enable event system as needed for the AppLovin MAX ad prefabs.
     /// </summary>
     [RequireComponent(typeof(EventSystem))]
-    public class EventSystemChecker : MonoBehaviour
+    public class MaxEventSystemChecker : MonoBehaviour
     {
         private void Awake()
         {
