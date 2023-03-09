@@ -331,18 +331,27 @@ namespace AppLovinMax.Scripts.Editor
             var plist = new PlistDocument();
             plist.ReadFromFile(plistPath);
 
+            SetSdkKeyIfNeeded(plist);
             SetAttributionReportEndpointIfNeeded(plist);
 
 #if UNITY_2018_2_OR_NEWER
             EnableVerboseLoggingIfNeeded(plist);
             AddGoogleApplicationIdIfNeeded(plist);
-            AddGoogleAdManagerAppIfNeeded(plist);
 #endif
             EnableConsentFlowIfNeeded(plist);
             AddSkAdNetworksInfoIfNeeded(plist);
             UpdateAppTransportSecuritySettingsIfNeeded(plist);
 
             plist.WriteToFile(plistPath);
+        }
+
+        private static void SetSdkKeyIfNeeded(PlistDocument plist)
+        {
+            var sdkKey = AppLovinSettings.Instance.SdkKey;
+            if (string.IsNullOrEmpty(sdkKey)) return;
+
+            const string AppLovinVerboseLoggingOnKey = "AppLovinSdkKey";
+            plist.root.SetString(AppLovinVerboseLoggingOnKey, sdkKey);
         }
 
         private static void SetAttributionReportEndpointIfNeeded(PlistDocument plist)
@@ -383,34 +392,18 @@ namespace AppLovinMax.Scripts.Editor
 
         private static void AddGoogleApplicationIdIfNeeded(PlistDocument plist)
         {
-            const string googleApplicationIdentifier = "GADApplicationIdentifier";
-            if (!AppLovinIntegrationManager.IsAdapterInstalled("Google"))
-            {
-                plist.root.values.Remove(googleApplicationIdentifier);
-                return;
-            }
+            if (!AppLovinIntegrationManager.IsAdapterInstalled("Google") && !AppLovinIntegrationManager.IsAdapterInstalled("GoogleAdManager")) return;
 
+            const string googleApplicationIdentifier = "GADApplicationIdentifier";
             var appId = AppLovinSettings.Instance.AdMobIosAppId;
             // Log error if the App ID is not set.
             if (string.IsNullOrEmpty(appId) || !appId.StartsWith("ca-app-pub-"))
             {
-                Debug.LogError("[AppLovin MAX] AdMob App ID is not set. Please enter a valid app ID within the AppLovin Integration Manager window.");
+                Debug.LogError("[AppLovin MAX] Google App ID is not set. Please enter a valid app ID within the AppLovin Integration Manager window.");
                 return;
             }
-            
+
             plist.root.SetString(googleApplicationIdentifier, appId);
-        }
-
-        private static void AddGoogleAdManagerAppIfNeeded(PlistDocument plist)
-        {
-            const string googleAdManagerApp = "GADIsAdManagerApp";
-            if (!AppLovinIntegrationManager.IsAdapterInstalled("GoogleAdManager"))
-            {
-                plist.root.values.Remove(googleAdManagerApp);
-                return;
-            }
-
-            plist.root.SetBoolean(googleAdManagerApp, true);
         }
 #endif
 

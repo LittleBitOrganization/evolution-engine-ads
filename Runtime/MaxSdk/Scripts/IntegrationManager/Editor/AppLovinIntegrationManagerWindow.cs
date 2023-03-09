@@ -203,7 +203,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                 DrawMediatedNetworks();
 
                 // Draw AppLovin Quality Service settings
-                EditorGUILayout.LabelField("AppLovin Quality Service", titleLabelStyle);
+                EditorGUILayout.LabelField("SDK Settings", titleLabelStyle);
                 DrawQualityServiceSettings();
 
                 EditorGUILayout.LabelField("Privacy Settings", titleLabelStyle);
@@ -494,45 +494,43 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
 
             if (isInstalled)
             {
-                // Custom integration for AdMob where the user can enter the Android and iOS App IDs.
-                if (network.Name.Equals("ADMOB_NETWORK"))
-                {
-                    // Custom integration requires Google AdMob adapter version newer than android_19.0.1.0_ios_7.57.0.0.
-                    if (MaxSdkUtils.CompareUnityMediationVersions(network.CurrentVersions.Unity, "android_19.0.1.0_ios_7.57.0.0") == VersionComparisonResult.Greater)
-                    {
-                        GUILayout.BeginHorizontal();
-                        GUILayout.Space(20);
-                        using (new EditorGUILayout.VerticalScope("box"))
-                        {
-                            string requiredVersion;
-                            string warningMessage;
-                            if (isPluginMoved)
-                            {
-                                requiredVersion = "android_19.6.0.1_ios_7.69.0.0";
-                                warningMessage = "Looks like the MAX plugin has been moved to a different directory. This requires Google adapter version newer than " + requiredVersion + " for auto-export of AdMob App ID to work correctly.";
-                            }
-                            else
-                            {
-                                requiredVersion = "android_19.2.0.0_ios_7.61.0.0";
-                                warningMessage = "The current version of AppLovin MAX plugin requires Google adapter version newer than " + requiredVersion + " to enable auto-export of AdMob App ID.";
-                            }
-
-                            GUILayout.Space(2);
-                            if (MaxSdkUtils.CompareUnityMediationVersions(network.CurrentVersions.Unity, requiredVersion) == VersionComparisonResult.Greater)
-                            {
-                                AppLovinSettings.Instance.AdMobAndroidAppId = DrawTextField("App ID (Android)", AppLovinSettings.Instance.AdMobAndroidAppId, networkWidthOption);
-                                AppLovinSettings.Instance.AdMobIosAppId = DrawTextField("App ID (iOS)", AppLovinSettings.Instance.AdMobIosAppId, networkWidthOption);
-                            }
-                            else
-                            {
-                                EditorGUILayout.HelpBox(warningMessage, MessageType.Warning);
-                            }
-                        }
-
-                        GUILayout.EndHorizontal();
-                    }
-                }
+                DrawGoogleAppIdTextBoxIfNeeded(network);
             }
+        }
+
+        private void DrawGoogleAppIdTextBoxIfNeeded(Network network)
+        {
+            // Custom integration for AdMob where the user can enter the Android and iOS App IDs.
+            if (network.Name.Equals("ADMOB_NETWORK"))
+            {
+                // Show only one set of text boxes if both ADMOB and GAM are installed
+                if (AppLovinIntegrationManager.IsAdapterInstalled("GoogleAdManager")) return;
+
+                DrawGoogleAppIdTextBox();
+            }
+
+            // Custom integration for GAM where the user can enter the Android and iOS App IDs.
+            else if (network.Name.Equals("GOOGLE_AD_MANAGER_NETWORK"))
+            {
+                DrawGoogleAppIdTextBox();
+            }
+        }
+
+        /// <summary>
+        /// Draws the text box for GAM or ADMOB to input the App ID
+        /// </summary>
+        private void DrawGoogleAppIdTextBox()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            using (new EditorGUILayout.VerticalScope("box"))
+            {
+                GUILayout.Space(2);
+                AppLovinSettings.Instance.AdMobAndroidAppId = DrawTextField("App ID (Android)", AppLovinSettings.Instance.AdMobAndroidAppId, networkWidthOption);
+                AppLovinSettings.Instance.AdMobIosAppId = DrawTextField("App ID (iOS)", AppLovinSettings.Instance.AdMobIosAppId, networkWidthOption);
+            }
+
+            GUILayout.EndHorizontal();
         }
 
         /// <summary>
@@ -557,15 +555,9 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             using (new EditorGUILayout.VerticalScope("box"))
             {
                 GUILayout.Space(4);
-                GUILayout.BeginHorizontal();
-                GUILayout.Space(4);
-                AppLovinSettings.Instance.QualityServiceEnabled = GUILayout.Toggle(AppLovinSettings.Instance.QualityServiceEnabled, "  Enable MAX Ad Review");
-                GUILayout.EndHorizontal();
-                GUILayout.Space(4);
-
                 if (!AppLovinIntegrationManager.CanProcessAndroidQualityServiceSettings)
                 {
-                    GUILayout.Space(2);
+                    GUILayout.Space(4);
                     GUILayout.BeginHorizontal();
                     GUILayout.Space(4);
                     EditorGUILayout.HelpBox(qualityServiceRequiresGradleBuildErrorMsg, MessageType.Warning);
@@ -575,7 +567,6 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                     GUILayout.Space(4);
                 }
 
-                GUI.enabled = AppLovinSettings.Instance.QualityServiceEnabled;
                 AppLovinSettings.Instance.SdkKey = DrawTextField("AppLovin SDK Key", AppLovinSettings.Instance.SdkKey, networkWidthOption, sdkKeyTextFieldWidthOption);
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(4);
@@ -587,7 +578,13 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
 
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
-                GUI.enabled = true;
+
+                GUILayout.Space(4);
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(4);
+                AppLovinSettings.Instance.QualityServiceEnabled = GUILayout.Toggle(AppLovinSettings.Instance.QualityServiceEnabled, "  Enable MAX Ad Review");
+                GUILayout.EndHorizontal();
+                GUILayout.Space(4);
 
                 GUILayout.Space(4);
             }
@@ -875,7 +872,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                     yield return AppLovinIntegrationManager.Instance.DownloadPlugin(network, false);
                 }
             }
-            
+
             EditorApplication.UnlockReloadAssemblies();
             networkButtonsEnabled = true;
 

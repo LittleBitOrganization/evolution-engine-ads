@@ -49,6 +49,7 @@ public class MaxSdkCallbacks : MonoBehaviour
 
     // Fire when the MaxVariableService has finished loading the latest set of variables.
     private static Action _onVariablesUpdatedEvent;
+    [System.Obsolete("This API has been deprecated. Please use our SDK's initialization callback to retrieve variables instead.")]
     public static event Action OnVariablesUpdatedEvent
     {
         add
