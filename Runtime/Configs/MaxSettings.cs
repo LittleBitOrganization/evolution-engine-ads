@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LittleBitGames.Ads.Configs
 {
     [Serializable]
-    public class MaxSettings
+    public class MaxSettings : IMediationSetting
     {
         [field: SerializeField] public string MaxSdkKey { get; private set; }
         [field: SerializeField] public bool IsInter { get; private set; } = true;

@@ -47,7 +47,7 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             Events.OnAdFinished += OnAdFinished;
         }
         
-        private void OnAdFinished(string arg1, MaxSdkBase.AdInfo arg2) => Finish(true);
+        private void OnAdFinished(string arg1, AdInfo arg2) => Finish(true);
 
         public void Show(IAdUnitPlace from, Action<AdShowInfo> callback)
         {
@@ -75,20 +75,20 @@ namespace LittleBitGames.Ads.MediationNetworks.MaxSdk
             _callback?.Invoke(adShowInfo);
         }
 
-        private void OnAdLoaded(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        private void OnAdLoaded(string adUnitId, AdInfo adInfo)
         {
             _retryTimer.Reset();
             
             Loaded?.Invoke();
         }
 
-        private void OnAdLoadFailed(string adUnitId, MaxSdkBase.ErrorInfo errorInfo) =>
+        private void OnAdLoadFailed(string adUnitId, AdErrorInfo errorInfo) =>
             _retryTimer.NextAttempt();
 
-        private void OnAdDisplayFailed(string adUnitId, MaxSdkBase.ErrorInfo errorInfo,
-            MaxSdkBase.AdInfo adInfo) => Finish(false);
+        private void OnAdDisplayFailed(string adUnitId, AdErrorInfo errorInfo,
+            AdInfo adInfo) => Finish(false);
 
-        private void OnAdHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) =>
+        private void OnAdHiddenEvent(string adUnitId, AdInfo adInfo) =>
             Finish(false);
     }
 }

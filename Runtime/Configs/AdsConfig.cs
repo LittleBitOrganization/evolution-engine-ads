@@ -1,21 +1,40 @@
+using System;
 using UnityEditor;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace LittleBitGames.Ads.Configs
 {
+    [Serializable]
     public class AdsConfig : ScriptableObject
     {
         public const string PathInResources = "Configs/AdsConfig";
         
         [SerializeField] private ExecutionMode mode;
+        [SerializeField] private SettingsEnum _settings;
         public ExecutionMode Mode => mode;
+        public SettingsEnum Settings => _settings;
         
-        public bool IsInter => MaxSettings.IsInter;
-        
-        public bool IsRewarded => MaxSettings.IsRewarded;
+        public bool IsInter => GetMediationSettings().IsInter;
+        public bool IsRewarded => GetMediationSettings().IsRewarded;
 
-        [field: SerializeField]
+        private IMediationSetting GetMediationSettings()
+        {
+            switch (_settings)
+            {
+                case SettingsEnum.MaxSDK:
+                    return MaxSettings;
+                case SettingsEnum.MixSDK:
+                    return MixSettings;
+            }
+
+            return null;
+        }
+        
+        [field: SerializeField, ShowIf("Settings", SettingsEnum.MaxSDK)]
         public MaxSettings MaxSettings { get; private set; }
+        [field: SerializeField, ShowIf("Settings", SettingsEnum.MixSDK)]
+        public MixSettings MixSettings { get; private set; }
         
 #if UNITY_EDITOR
         [MenuItem("Tools/Configs/Create Ads Config")]
