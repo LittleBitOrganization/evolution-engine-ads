@@ -26,7 +26,7 @@
 
 # Quick Start
 
-1. Настройте необходимые рекламные сети в <b> Applovin Integration Manager </b>.
+1. Подключите необходимый враппер.
 
 2. Создайте <b> Ads Config </b> с помощью меню <b> Tools/Configs/Ads Config </b>. 
 
@@ -37,7 +37,7 @@
 
 ![Alt text](https://github.com/LittleBitOrganization/documentation-resources/blob/master/evolution-engine-ads/documentation-images/ads-config.png)
 
-3. Для подключения рекламы AppLovin Max через Zenject используйте следующий инсталлер:
+3. Для подключения рекламы через враппер AppLovin Max с помощью Zenject используйте следующий инсталлер:
 
 ```c#
 public override void InstallBindings()
