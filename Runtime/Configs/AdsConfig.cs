@@ -26,6 +26,8 @@ namespace LittleBitGames.Ads.Configs
                     return MaxSettings;
                 case SettingsEnum.MixSDK:
                     return MixSettings;
+                case SettingsEnum.YandexSDK:
+                    return YandexSettings;
             }
 
             return null;
@@ -35,6 +37,8 @@ namespace LittleBitGames.Ads.Configs
         public MaxSettings MaxSettings { get; private set; }
         [field: SerializeField, ShowIf("Settings", SettingsEnum.MixSDK)]
         public MixSettings MixSettings { get; private set; }
+        [field: SerializeField, ShowIf("Settings", SettingsEnum.YandexSDK)]
+        public YandexSettings YandexSettings { get; private set; }
         
 #if UNITY_EDITOR
         [MenuItem("Tools/Configs/Create Ads Config")]
