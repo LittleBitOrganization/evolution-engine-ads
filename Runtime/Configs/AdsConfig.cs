@@ -40,6 +40,8 @@ namespace LittleBitGames.Ads.Configs
         [field: SerializeField, ShowIf("Settings", SettingsEnum.YandexSDK)]
         public YandexSettings YandexSettings { get; private set; }
         
+        [field: SerializeField] public UMPSettings UmpSettings { get; private set; }
+        
 #if UNITY_EDITOR
         [MenuItem("Tools/Configs/Create Ads Config")]
         public static void Create()
@@ -62,5 +64,14 @@ namespace LittleBitGames.Ads.Configs
             AssetDatabase.SaveAssets();
         }
 #endif
+        
+    }
+    
+    [Serializable]
+    public class UMPSettings
+    {
+        [SerializeField] private bool _isEnable = false;
+        public bool IsEnable => _isEnable;
+        
     }
 }
