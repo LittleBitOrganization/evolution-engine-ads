@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using NaughtyAttributes;
@@ -71,7 +72,9 @@ namespace LittleBitGames.Ads.Configs
     public class UMPSettings
     {
         [SerializeField] private bool _isEnable = false;
+        [SerializeField] private List<string> _idTestDevices;
         public bool IsEnable => _isEnable;
-        
+
+        public IReadOnlyList<string> IDTestDevices => _idTestDevices;
     }
 }
