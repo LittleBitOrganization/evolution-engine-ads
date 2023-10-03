@@ -18,6 +18,7 @@ namespace LittleBitGames.Ads.Configs
         
         public bool IsInter => GetMediationSettings().IsInter;
         public bool IsRewarded => GetMediationSettings().IsRewarded;
+        public bool IsBanner => GetMediationSettings().IsBanner;
 
         private IMediationSetting GetMediationSettings()
         {

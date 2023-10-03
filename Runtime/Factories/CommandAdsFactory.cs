@@ -25,6 +25,11 @@ namespace LittleBitGames.Ads
         {
             return new CommandAds(_adsService, AdType.Inter, place, _skipAdsCondition, success => OnAdShow(success, AdType.Inter));
         }
+        
+        public CommandAds ShowBanner(IAdUnitPlace place)
+        {
+            return new CommandAds(_adsService, AdType.Banner, place, _skipAdsCondition, success => OnAdShow(success, AdType.Banner));
+        }
 
         private void OnAdShow(bool success, AdType adType)
         {

@@ -9,9 +9,11 @@ namespace LittleBitGames.Ads.Configs
         [SerializeField] private string maxInterAdUnitKey;
     
         [SerializeField] private string maxRewardedAdUnitKey;
+        [SerializeField] private string maxBannerAdUnitKey;
         
         public string MaxInterAdUnitKey => maxInterAdUnitKey;
 
         public string MaxRewardedAdUnitKey => maxRewardedAdUnitKey;
+        public string MaxBannerAdUnitKey => maxBannerAdUnitKey;
     }
 }

@@ -4,5 +4,6 @@ namespace LittleBitGames.Ads.Configs
     {
         public bool IsInter { get; }
         public bool IsRewarded { get; }
+        public bool IsBanner { get; }
     }
 }

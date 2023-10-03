@@ -9,19 +9,21 @@ namespace LittleBitGames.Ads
     {
         private readonly IAdUnit _interAd;
         private readonly IAdUnit _rewardedAd;
+        private readonly IAdUnit _bannerAd;
 
         private readonly IMediationNetworkInitializer _initializer;
 
         public IMediationNetworkInitializer Initializer => _initializer;
         public IReadOnlyList<IAdUnit> AdUnits { get; }
 
-        public AdsService(IMediationNetworkInitializer initializer, IAdUnit interAd, IAdUnit rewardedAd)
+        public AdsService(IMediationNetworkInitializer initializer, IAdUnit interAd, IAdUnit rewardedAd, IAdUnit bannerAd)
         {
             _initializer = initializer;
             _rewardedAd = rewardedAd;
+            _bannerAd = bannerAd;
             _interAd = interAd;
 
-            AdUnits = new[] {interAd, rewardedAd};
+            AdUnits = new[] {interAd, rewardedAd,bannerAd};
         }
 
         public void Run()
@@ -40,6 +42,9 @@ namespace LittleBitGames.Ads
                 case AdType.Rewarded:
                     _rewardedAd?.Show(from, callback);
                     break;
+                case AdType.Banner:
+                    _bannerAd?.Show(from, callback);
+                    break;
             }
         }
 
@@ -47,6 +52,7 @@ namespace LittleBitGames.Ads
         {
             AdType.Inter => _interAd.IsReady(),
             AdType.Rewarded => _rewardedAd.IsReady(),
+            AdType.Banner =>_bannerAd.IsReady(),
             _ => false
         };
 
@@ -54,6 +60,7 @@ namespace LittleBitGames.Ads
         {
             _interAd?.Load();
             _rewardedAd?.Load();
+            _bannerAd?.Load();
         }
     }
 }

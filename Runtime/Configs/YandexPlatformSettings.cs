@@ -10,8 +10,10 @@ namespace LittleBitGames.Ads.Configs
     
         [SerializeField] private string yandexRewardedAdUnitKey;
         
-        public string YandexInterAdUnitKey => yandexInterAdUnitKey;
+        [SerializeField] private string yandexBannerAdUnitKey;
 
+        public string YandexInterAdUnitKey => yandexInterAdUnitKey;
         public string YandexRewardedAdUnitKey => yandexRewardedAdUnitKey;
+        public string YandexBannerAdUnitKey => yandexBannerAdUnitKey;
     }
 }

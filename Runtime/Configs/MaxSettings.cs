@@ -9,6 +9,7 @@ namespace LittleBitGames.Ads.Configs
         [field: SerializeField] public string MaxSdkKey { get; private set; }
         [field: SerializeField] public bool IsInter { get; private set; } = true;
         [field: SerializeField] public bool IsRewarded { get; private set; } = true;
+        [field: SerializeField] public bool IsBanner { get; private set; } = true;
 
         [SerializeField] private MaxPlatformSettings settingsAndroid;
         [SerializeField] private MaxPlatformSettings settingsIOS;
