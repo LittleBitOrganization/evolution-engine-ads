@@ -16,6 +16,8 @@ namespace LittleBitGames.Ads.AdUnits
         
         IAdUnitEvents Events { get; }
         event Action Loaded;
+        
+        event Action <IAdInfo> OnAdRevenuePaid;
     }
     
 }

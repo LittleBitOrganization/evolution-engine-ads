@@ -18,6 +18,7 @@ namespace LittleBitGames.Ads.AdUnits
         public IAdUnitPlace UnitPlace { get; set; }
         public IAdUnitEvents Events { get; }
         public event Action Loaded;
+        public event Action <IAdInfo> OnAdRevenuePaid;
 
         public AdUnitLogic(IAdUnitKey key, IAdUnitEvents events, ICoroutineRunner coroutineRunner)
         {
@@ -51,8 +52,14 @@ namespace LittleBitGames.Ads.AdUnits
             Events.OnAdHidden += OnAdHiddenEvent;
             Events.OnAdDisplayFailed += OnAdDisplayFailed;
             Events.OnAdFinished += OnAdFinished;
+            Events.OnAdRevenuePaid += EventsOnOnAdRevenuePaid;
         }
-        
+
+        private void EventsOnOnAdRevenuePaid(string arg1, IAdInfo arg2)
+        {
+            OnAdRevenuePaid?.Invoke(arg2);
+        }
+
         private void OnAdFinished(string arg1, IAdInfo arg2) => Finish(true);
         
         private void Finish(bool success)
