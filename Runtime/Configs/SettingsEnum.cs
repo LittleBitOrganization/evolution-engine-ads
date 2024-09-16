@@ -4,6 +4,7 @@ namespace LittleBitGames.Ads.Configs
     {
         MaxSDK,
         MixSDK,
-        YandexSDK
+        YandexSDK,
+        PlaygapSDK
     }
 }
