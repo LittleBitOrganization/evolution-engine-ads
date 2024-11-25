@@ -6,6 +6,7 @@ namespace LittleBitGames.Ads
     {
         void BuildInterAdUnit();
         void BuildRewardedAdUnit();
+        void BuildBannerAdUnit();
         IAdsService GetResult();
         IMediationNetworkInitializer Initializer { get; }
         

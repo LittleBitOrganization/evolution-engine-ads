@@ -33,6 +33,8 @@ namespace LittleBitGames.Ads.Configs
                     return YandexSettings;
                 case SettingsEnum.PlaygapSDK:
                     return PlaygapSettings;
+                case SettingsEnum.LevelPlaySDK:
+                    return LevelPlaySettings;
             }
 
             return null;
@@ -46,6 +48,8 @@ namespace LittleBitGames.Ads.Configs
         public YandexSettings YandexSettings { get; private set; }
         [field: SerializeField, ShowIf("Settings", SettingsEnum.PlaygapSDK)]
         public PlaygapSetting PlaygapSettings { get; private set; }
+        [field: SerializeField, ShowIf("Settings", SettingsEnum.LevelPlaySDK)]
+        public LevelPlaySetting LevelPlaySettings { get; private set; }
         
         [field: SerializeField] public UMPSettings UmpSettings { get; private set; }
         
