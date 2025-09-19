@@ -35,6 +35,8 @@ namespace LittleBitGames.Ads.Configs
                     return PlaygapSettings;
                 case SettingsEnum.LevelPlaySDK:
                     return LevelPlaySettings;
+                case SettingsEnum.MasSDK:
+                    return MasSettings;
             }
 
             return null;
@@ -50,6 +52,9 @@ namespace LittleBitGames.Ads.Configs
         public PlaygapSetting PlaygapSettings { get; private set; }
         [field: SerializeField, ShowIf("Settings", SettingsEnum.LevelPlaySDK)]
         public LevelPlaySetting LevelPlaySettings { get; private set; }
+        
+        [field: SerializeField, ShowIf("Settings", SettingsEnum.MasSDK)]
+        public LevelPlaySetting MasSettings { get; private set; }
         
         [field: SerializeField] public UMPSettings UmpSettings { get; private set; }
         
